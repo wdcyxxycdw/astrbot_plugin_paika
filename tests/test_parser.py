@@ -46,3 +46,16 @@ def test_reply_dict_message_component_is_supported():
 
 def test_reference_text_is_not_parsed_as_current_command():
     assert parse_text("普通聊天\n上车") is None
+
+
+def test_reply_enum_component_is_supported():
+    event = type(
+        "Event",
+        (),
+        {
+            "get_messages": lambda self: [
+                type("Reply", (), {"type": type("Type", (), {"name": "Reply"})(), "id": "202"})()
+            ]
+        },
+    )()
+    assert extract_reply_message_id(event) == "202"

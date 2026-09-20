@@ -42,9 +42,14 @@ def extract_reply_message_id(event) -> str | None:
                 value = data.get("id") or data.get("message_id") or data.get("messageId")
             else:
                 value = None
-        if str(name).lower() == "reply" and value is not None:
+        if _component_type_is(name, "reply") and value is not None:
             return str(value)
     return None
+
+
+def _component_type_is(value, expected: str) -> bool:
+    name = getattr(value, "name", value)
+    return str(name).lower().split(".")[-1] == expected
 
 
 def extract_text(event) -> str:
