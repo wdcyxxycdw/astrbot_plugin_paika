@@ -1,0 +1,6 @@
+name: paika
+desc: 群聊排卡组队插件
+version: 0.1.0
+author: paika
+repo: "https://github.com/wdcyxxycdw/astrbot_plugin_paika"
+astrbot_version: ">=4.25.0,<5"

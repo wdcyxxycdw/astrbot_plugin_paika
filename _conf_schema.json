@@ -1,0 +1,55 @@
+{
+  "default_capacity": {
+    "type": "int",
+    "description": "未指定人数时的默认人数",
+    "default": 5,
+    "min": 2,
+    "max": 100
+  },
+  "max_capacity": {
+    "type": "int",
+    "description": "单个房间允许的最大人数",
+    "default": 20,
+    "min": 2,
+    "max": 100
+  },
+  "default_content": {
+    "type": "string",
+    "description": "未指定房间标题时使用的默认标题",
+    "default": "未填写"
+  },
+  "reaction_enabled": {
+    "type": "bool",
+    "description": "是否尝试使用 NapCat 原生表情回应",
+    "default": true
+  },
+  "reaction_emoji_id": {
+    "type": "string",
+    "description": "NapCat 表情回应的 emoji_id，需按实际版本确认",
+    "default": "76"
+  },
+  "reaction_emoji_type": {
+    "type": "int",
+    "description": "NapCat 可选 emoji_type",
+    "default": 1
+  },
+  "show_ended_in_list": {
+    "type": "bool",
+    "description": "查房时是否显示已结束房间",
+    "default": false
+  },
+  "auto_disband_minutes": {
+    "type": "int",
+    "description": "等待房间超过此分钟数仍未发车时自动解散，已发车房间超过此时间自动结束，0 表示关闭",
+    "default": 15,
+    "min": 0,
+    "max": 1440
+  },
+  "reminder_minutes": {
+    "type": "int",
+    "description": "等待房间每隔此分钟数提醒一次，0 表示关闭",
+    "default": 5,
+    "min": 0,
+    "max": 1440
+  }
+}
