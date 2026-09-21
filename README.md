@@ -59,15 +59,32 @@ data/plugin_data/paika/paika.db
 
 ## 安装
 
-将插件源码目录复制到 AstrBot 的插件目录，然后在 AstrBot 中加载插件。插件不需要额外运行时依赖，AstrBot 提供插件 API。
+在 AstrBot WebUI 的插件管理中使用“从链接安装”，填写：
+
+```text
+https://github.com/wdcyxxycdw/astrbot_plugin_paika
+```
+
+也可以将源码放入 `data/plugins/astrbot_plugin_paika`，然后在 AstrBot 中加载插件。插件不需要额外运行时依赖，AstrBot 提供插件 API。请先配置并连接 OneBot v11（`aiocqhttp`）适配器；reaction 功能还需要 NapCat 支持。
 
 ## NapCat reaction 注意事项
 
 AstrBot 当前没有统一的 OneBot 原生 reaction API，因此插件会直接尝试调用 NapCat 的 `set_msg_emoji_like`。`reaction_emoji_id` 默认设置为 `76`，不同 NapCat/QQ 版本可能需要在插件配置中调整。插件会从 raw notice 读取 `group_msg_emoji_like` 的目标消息 ID、`likes` 和 `is_add` 字段；真实环境仍需确认发送消息 ID 与 reaction notice 中的 ID 一致。
 
+## 兼容性与已知限制
+
+- 插件声明兼容 AstrBot `>=4.25.0,<5`；已在 AstrBot 4.28.1 容器验证加载、工具注册和真实消息组件解析，并非对所有版本逐一验收。
+- 本地回归测试通过；完整真人 QQ 群聊验收暂缓，不保证所有 QQNT / NapCat 版本的 reaction 行为一致。
+- 正常 OneBot 发送会保存开房消息 ID。兼容发送路径若无法返回 ID，房间仍可通过标题操作，但不能保证 Reply / reaction 精确选房。
+- 房间仅用标题展示，数据库内部仍保留编号；纯数字操作参数保留旧编号兼容语义，建议使用非纯数字标题。
+- NapCat 属于第三方 QQ 接入方案，存在被 QQ 踢下线或限制账号的可能。建议使用专用账号；本插件无法解除 QQ 风控或自动完成扫码登录。
+- SQLite 会在本地保存群号、成员 QQ 标识、昵称、房间信息和操作时间；插件自身不上传这些数据。请勿公开运行配置和数据库。
+
+问题反馈：[GitHub Issues](https://github.com/wdcyxxycdw/astrbot_plugin_paika/issues)。反馈时请隐去账号标识、密码和令牌。
+
 ## 本地测试
 
-运行时依赖：
+开发测试依赖：
 
 ```bash
 python -m pip install -r requirements-dev.txt
