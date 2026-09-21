@@ -1,5 +1,6 @@
 import sys
 import types
+from unittest.mock import Mock
 
 
 class FakeFilter:
@@ -73,6 +74,7 @@ def install_astrbot_stubs(monkeypatch):
         def __init__(self, chain):
             self.chain = chain
 
+    api.logger = Mock(spec=["debug", "info", "warning", "error", "exception"])
     api.event = event
     event.AstrMessageEvent = object
     event.filter = FakeFilter

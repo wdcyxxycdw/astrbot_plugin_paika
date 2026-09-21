@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import logging
 import sys
 from contextlib import suppress
 from datetime import datetime, timedelta, timezone
@@ -10,6 +9,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from astrbot.api import logger
 from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star, register
 
@@ -32,9 +32,6 @@ from paika.transport import (
     send_context_message,
     send_group_message,
 )
-
-
-LOGGER = logging.getLogger(__name__)
 
 
 _COMMAND_FILTER_AVAILABLE = callable(getattr(filter, "command", None))
@@ -328,7 +325,7 @@ class PaikaPlugin(Star):
             )
             send_result = await send_group_message(event, group_id, components)
             if not send_result.sent:
-                LOGGER.error("排卡房间消息发送失败，结束房间 room_id=%s", room.room_id)
+                logger.error(f"排卡房间消息发送失败，结束房间 room_id={room.room_id}")
                 self.storage.end_room(room.room_id, expected_status=RoomStatus.WAITING)
                 _stop_event(event)
                 return
@@ -342,9 +339,8 @@ class PaikaPlugin(Star):
                         self.reaction_emoji_type,
                     )
             else:
-                LOGGER.warning(
-                    "排卡房间消息已发送但未取得消息 ID，Reply/reaction 无法绑定 room_id=%s",
-                    room.room_id,
+                logger.warning(
+                    f"排卡房间消息已发送但未取得消息 ID，Reply/reaction 无法绑定 room_id={room.room_id}"
                 )
             _stop_event(event)
             return
@@ -418,7 +414,7 @@ class PaikaPlugin(Star):
             try:
                 await self._process_room_timers()
             except Exception:
-                LOGGER.exception("排卡房间定时任务执行失败")
+                logger.exception("排卡房间定时任务执行失败")
             try:
                 await asyncio.wait_for(self._timer_stop.wait(), timeout=30)
             except asyncio.TimeoutError:
@@ -479,7 +475,7 @@ class PaikaPlugin(Star):
 
     async def _send_scheduled_message(self, room, detail: str):
         if not room.message_origin:
-            LOGGER.warning("房间 #%s 没有消息来源，无法发送定时通知", room.room_id)
+            logger.warning(f"房间 #{room.room_id} 没有消息来源，无法发送定时通知")
             return
         sent = await send_context_message(
             self.context,
@@ -490,7 +486,7 @@ class PaikaPlugin(Star):
             ),
         )
         if not sent:
-            LOGGER.warning("房间 #%s 定时通知发送失败", room.room_id)
+            logger.warning(f"房间 #{room.room_id} 定时通知发送失败")
 
     def _operation_lock_for(self) -> asyncio.Lock:
         if self._operation_lock is None:
@@ -534,7 +530,7 @@ class PaikaPlugin(Star):
             except asyncio.CancelledError:
                 pass
             except Exception:
-                LOGGER.exception("排卡定时任务退出时发生异常")
+                logger.exception("排卡定时任务退出时发生异常")
             finally:
                 self._timer_task = None
         async with self._operation_lock_for():
