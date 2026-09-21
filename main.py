@@ -71,7 +71,7 @@ def _llm_tool_filter(name: str):
     return lambda function: function
 
 
-@register("paika", "paika", "群聊排卡组队插件", "0.1.0")
+@register("paika", "paika", "群聊排卡组队插件", "0.1.1")
 class PaikaPlugin(Star):
     def __init__(self, context: Context, config: dict[str, Any] | None = None):
         super().__init__(context)

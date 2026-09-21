@@ -6,7 +6,7 @@ desc: >-
   多房间并行、同群一人一房、斜杠指令、回复消息上下车和 LLM 工具。
   支持 NapCat 表情回应上下车、满员自动发车、发车后成员锁定、
   房主结束房间、定时提醒和超时结束，状态通知使用 At 列出成员。
-version: 0.1.0
+version: 0.1.1
 author: paika
 repo: "https://github.com/wdcyxxycdw/astrbot_plugin_paika"
 astrbot_version: ">=4.25.0,<5"
